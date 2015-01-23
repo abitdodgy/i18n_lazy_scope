@@ -1,0 +1,3 @@
+module I18nLazyScope
+  VERSION = "0.0.1"
+end
