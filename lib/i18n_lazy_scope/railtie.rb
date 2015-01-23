@@ -6,7 +6,7 @@ require "i18n_lazy_scope/action_view/helper"
 
 module I18nLazyScope
   class Railtie < Rails::Railtie
-    initialize "i18n_lazy_scope.helpers" do
+    initializer "i18n_lazy_scope.helpers" do
       ActiveSupport.on_load(:action_view) do
         include I18nLazyScope::ActionView::Helper
       end
