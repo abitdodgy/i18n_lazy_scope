@@ -1,4 +1,4 @@
-require "rails"
+# require "rails"
 
 require "i18n_lazy_scope/action_controller/helper"
 require "i18n_lazy_scope/action_mailer/helper"
