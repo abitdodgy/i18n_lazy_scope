@@ -1,10 +1,6 @@
 module I18nLazyScope::ActionView
   module Helper
-    def t_scoped(key, **args)
-      t(key, scope: lazy_scope(key), **args)
-    end
-
-    def lazy_scope(key)
+    def lazy_scope
       [:views, view_path]
     end
 
@@ -14,7 +10,7 @@ module I18nLazyScope::ActionView
       if @virtual_path
         @virtual_path.gsub(%r{/_?}, ".")
       else
-        raise "Cannot use t(#{key.inspect}) lazy lookup because path is not available"
+        raise "Cannot use lazy lookup because template path is not available"
       end
     end
   end

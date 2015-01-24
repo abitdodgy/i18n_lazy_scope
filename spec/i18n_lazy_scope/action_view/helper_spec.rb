@@ -2,6 +2,7 @@ require "spec_helper"
 
 class FakeView
   include I18nLazyScope::ActionView::Helper
+  include I18nLazyScope::Helper
 
   def initialize
     @virtual_path = 'users.show.user_profile'

@@ -1,7 +1,8 @@
-require "i18n_lazy_scope/helper"
 require "i18n_lazy_scope/action_controller/helper"
 require "i18n_lazy_scope/action_mailer/helper"
 require "i18n_lazy_scope/action_view/helper"
+
+require "i18n_lazy_scope/helper"
 
 require "i18n"
 

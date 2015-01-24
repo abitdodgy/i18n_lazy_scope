@@ -20,6 +20,7 @@ module I18nLazyScope
       end
 
       ActiveSupport.on_load(:action_view) do
+        include I18nLazyScope::Helper
         include I18nLazyScope::ActionView::Helper
       end
     end
