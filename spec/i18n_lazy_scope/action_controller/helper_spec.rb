@@ -1,9 +1,7 @@
 require "spec_helper"
-require "i18n_lazy_scope/action_controller/helper"
-require "i18n"
 
 class FakeController
-  include I18nLazyScope::ActionController::Helper
+  include I18nLazyScope::Helper
 
   def t(*args)
     I18n.t(*args)

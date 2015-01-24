@@ -1,9 +1,7 @@
 require "spec_helper"
-require "i18n_lazy_scope/action_mailer/helper"
-require "i18n"
 
 class FakeMailer
-  include I18nLazyScope::ActionMailer::Helper
+  include I18nLazyScope::Helper
 
   def t(*args)
     I18n.t(*args)
