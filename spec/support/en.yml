@@ -12,5 +12,6 @@ en:
   views:
     users:
       show:
-        hello: "World!"
-        greet: "%{greeting}, %{name}!"
+        user_profile:
+          hello: "World!"
+          greet: "%{greeting}, %{name}!"
