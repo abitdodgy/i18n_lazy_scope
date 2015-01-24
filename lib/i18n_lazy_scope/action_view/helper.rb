@@ -1,12 +1,14 @@
 module I18nLazyScope::ActionView
   module Helper
     def t_scoped(key, **args)
-      t(key, scope: self.lazy_scope(key), **args)
+      t(key, scope: lazy_scope(key), **args)
     end
 
     def lazy_scope(key)
       [:views, view_path]
     end
+
+  private
 
     def view_path
       if @virtual_path
