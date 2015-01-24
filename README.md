@@ -98,7 +98,7 @@ Or install it yourself as:
 Call the `t_scoped` method instead of `t`, or `translate`, and make sure you have the corresponding keys in your locale file. Say you are in `app/views/users/show.html.erb`.
 
 ```erb
-<%= t_scoped 'weclome' %>
+<%= t_scoped 'greeting' %>
 ```
 
 ```yaml
@@ -109,12 +109,18 @@ en:
        greeting: "Hello!"
 ```
 
+The library inserts a top level name in the scope for you. You will be able to customise this in future releases, but for now, the scopes default to:
+
+1. Conrollers: `locale.controllers.controller_name.action_name.key`
+2. Mailers: `locale.mailers.mailer_name.action_name.key`
+3. Views: `locale.views.template_or_partial_path.key`
+
 ### Interpolation
 
 It works exactly as it would if you call `t` or `translate`.
 
 ```erb
-<%= t_scoped 'weclome', name: @user.name %>
+<%= t_scoped 'greeting', name: @user.name %>
 ```
 
 ```yaml
@@ -127,7 +133,9 @@ en:
 
 ### Scoping
 
-If you have to customise the scope on individual basis, then you should use `t` and `translate` that ship with the [I18n][3] gem. Scoping on individual basis defeates the point of this gem. This gem isn't meant to replace the I18n; it's a tiny wrapper that depends on it. But in future releases you will be able to customise top level namespaces, such as `views`, `controllers`, `mailers`, etc.
+If you have to customise the scope on individual basis, then you should use `t` and `translate` that ship with Rails or the [I18n][3] gem. Scoping on individual basis defeates the point of this gem. This gem isn't meant to replace the I18n; it's a tiny wrapper that depends on it.
+
+In future releases you will be able to customise top level namespaces, such as `views`, `controllers`, `mailers`, etc.
 
 ## API
 
