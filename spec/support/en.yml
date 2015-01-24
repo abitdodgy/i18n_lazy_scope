@@ -1,0 +1,16 @@
+en:
+  controllers:
+    users:
+      show:
+        hello: "World!"
+        greet: "%{greeting}, %{name}!"
+  mailers:
+    user_mailer:
+      welcome_email:
+        hello: "World!"
+        subject: "%{greeting}, %{name}!"
+  views:
+    users:
+      show:
+        hello: "World!"
+        greet: "%{greeting}, %{name}!"
