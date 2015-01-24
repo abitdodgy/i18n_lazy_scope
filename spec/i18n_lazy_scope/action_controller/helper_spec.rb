@@ -9,7 +9,7 @@ class FakeController
   end
 
   def controller_name; :users; end
-  def action_name; :show; end
+  def action_name;     :show;  end
 end
 
 describe FakeController do
