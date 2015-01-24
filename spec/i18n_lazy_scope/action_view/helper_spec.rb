@@ -1,17 +1,15 @@
 require "spec_helper"
 
 class FakeView
+  include I18nLazyScope::ActionView::Helper
   include I18nLazyScope::Helper
 
   def t(*args)
     I18n.t(*args)
   end
 
-private
-
-  def lazy_scope
-    [:views, :users, :show]
-  end
+  def controller_name; :users; end
+  def action_name; :show; end
 end
 
 describe FakeView do

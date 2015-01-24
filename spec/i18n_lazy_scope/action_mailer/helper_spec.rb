@@ -1,20 +1,18 @@
 require "spec_helper"
 
 class FakeMailer
+  include I18nLazyScope::ActionMailer::Helper
   include I18nLazyScope::Helper
 
   def t(*args)
     I18n.t(*args)
   end
 
-private
-
-  def lazy_scope
-    [:mailers, :user_mailer, :welcome_email]
-  end
+  def mailer_name; :user_mailer; end
+  def action_name; :welcome_email; end
 end
 
-describe FakeController do
+describe FakeMailer do
   before :each do
     @mailer = FakeMailer.new
   end
