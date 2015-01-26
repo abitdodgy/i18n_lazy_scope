@@ -1,7 +1,7 @@
 module I18nLazyScope::ActionMailer
   module Helper
     def lazy_scope
-      [:mailers, mailer_name, action_name]
+      [*I18nLazyScope.configuration.action_mailer_scope, mailer_name, action_name]
     end
   end
 end

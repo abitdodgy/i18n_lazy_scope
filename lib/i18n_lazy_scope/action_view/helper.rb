@@ -1,7 +1,7 @@
 module I18nLazyScope::ActionView
   module Helper
     def lazy_scope
-      [:views, view_path]
+      [*I18nLazyScope.configuration.action_view_scope, view_path]
     end
 
   private

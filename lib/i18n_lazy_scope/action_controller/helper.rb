@@ -1,7 +1,7 @@
 module I18nLazyScope::ActionController
   module Helper
     def lazy_scope
-      [:controllers, controller_name, action_name]
+      [*I18nLazyScope.configuration.action_controller_scope, controller_name, action_name]
     end
   end
 end

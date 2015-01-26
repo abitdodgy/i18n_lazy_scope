@@ -1,81 +1,57 @@
 # I18nLazyScope
 
-I18nLazyScope is a tiny library that lets you use lazy lookup and keep a better structure for your locale files when localising strings in your Ruby applications. This means quicker translations without sacrificing the structure of your locale files.
+I18nLazyScope is a tiny library that lets you use lazy lookup and custom scoping in your locale files when localising strings in your Ruby applications. This means quicker translations without sacrificing the structure of your locale files.
 
-```ruby
-# users_controller#create
-redirect_to @user, notice: scoped_t('welcome_message')
+The library inserts a customisable namespace in the scope for you, just below the locale. The following table illustrates the difference between I18nLazyLookup and Rails when resolving lazy lookup keys.
+
+|             | I18nLazyLookup                                       | Rails/I18n Lazy Lookup
+| ------------|------------------------------------------------------|------------------------------------------|
+| Controllers | `locale.controllers.controller_name.action_name.key` | `locale.controller_name.action_name.key` |
+| Mailers     | `locale.mailers.mailer_name.action_name.key`         | `locale.mailer_name.action_name.key`     |
+| Views       | `locale.views.template_or_partial_path.key`          | `locale.template_or_partial_path.key`    |
+
+
+## What's Lazy Lookup?
+
+[Lazy lookup][1] is a feature that ships with Rails and the [I18n][3] gem. It allows you to translate strings without explicitly qualifying their entire scope. For example, consider the following code that lives in `show.html.erb` inside `app/views/users`, and that your application's locale is English.
+
+```erb
+<%= t('.welcome_message') %>
 ```
+
+Rails automatically converts `.welcome_message` to `en.users.show.welcome_message`. This saves you from having to type `users.show`, which is handy if you have lots of translations. But it forces you structure your locale files the way Rails prefers.
 
 ```yaml
 en:
-  controllers: # <- Oh, look, it's a controller scope with lazy lookup! Yay!
-    users:
-      create:
-        welcome_message: "You are such a star!"
+  users:
+    show:
+      welcome_message: "You are such a star!"
 ```
 
-I18nLazyScope provides a wrapper method around the `translate` and `t` methods in Rails and the Ruby [I18n][3] gem.
-
-## What Problem Does This Solve
-
-Imagine you are in the `users_controller#show` action, and you want to flash a localised welcome message.
-
-```ruby
-def create
-  if @user.save
-    redirect_to @user, notice: t('welcome_message')
-  end
-end
-```
-
-This scopes the translation to `locale.welcome_message`. If your current--or default--locale is English, the corresponding key in your locale file would be `en.welcome_message`.
-
-Oh dear! This is an awful way to structure translations. You want to scope them instead. You create a key in your locale file.
+The above structure can get messy because `en.users` can refer to a view or a controller, and it feels wrong for `users` to be floating under the top level namespace. Most developers prefer to keep their translations under a scope.
 
 ```yaml
 en:
   controllers:
     users:
-      create:
-        welcome_message: "You are such a star!"
+      show:
+        success: "Yay!"
+  views:
+    users:
+      show:
+        welcome_message: "Yay!"
 ```
 
-And you add the key to your code.
-
-```ruby
-redirect_to @user, notice: t('controllers.users.create.welcome_message')
-```
-
-Holy Semantics, Batman! `controllers.users.create` is a lot to type before each key name. And after some time you tire of typing it repeatedly. You read the documentation and discover [lazy lookup][1]--brilliant. You decide to use it, and diligently place a dot before your key name.
-
-```ruby
-redirect_to @user, notice: t('.welcome_message')
-```
-
-Soon after, when testing, you discover that you have a `translation missing` error in your template. This is because lazy lookup will scope the translation to `en.users.create.welcome_message`. The neat `controller` namespace we created is missing.
-
-You have two choices:
-
-1. Change the structure of your locale file to match how lazy lookup works.
-2. Use verbose, fully qualified scopes.
-
-Option one might cause your locale file to become a mess, or worse, cause namespace collisions because views and controllers share part of the namespace: `en.users`. And option two is annoying to type all the time.
-
-**I18nLazyScope** lets you use lazy lookup and keep a better structure for your locale files.
+So applications with lots of translations will find it hard to take advantage of lazy lookup. Wouldn't it be great if you could use lazy lookup and a custom namespace? Well, now you can.
 
 ```erb
-redirect_to @user, notice: scoped_t('welcome_message')
-
+<%= t_scoped('welcome_message') %>
 ```
 
-```yaml
-en:
-  controllers: # or mailers, views, or, whatever you want
-    users:
-      create:
-        welcome_message: "You are such a star!"
-```
+The `scoped_t` method will automatically convert `welcome_message` to `en.views.show.welcome_message`. And you can customise the `views` part of the scope to anything you like. Your locale file would contain the `views` namespace to keep view translations organised as demonstrated above.
+
+I18nLazyScope provides a wrapper method around the `translate` and `t` methods in Rails and the Ruby I18n gem.
+
 
 ## Installation
 
@@ -95,7 +71,7 @@ Or install it yourself as:
 
 ## Usage
 
-Call the `t_scoped` method instead of `t`, or `translate`, and make sure you have the corresponding keys in your locale file. Say you are in `app/views/users/show.html.erb`.
+Call the `t_scoped` method instead of `t`, or `translate`, and make sure you have the corresponding keys in your locale files. Say you are in `app/views/users/show.html.erb`.
 
 ```erb
 <%= t_scoped 'greeting' %>
@@ -109,11 +85,26 @@ en:
        greeting: "Hello!"
 ```
 
-The library inserts a top level name in the scope for you. You will be able to customise this in future releases, but for now, the scopes default to:
+The library inserts a top level name in the scope for you. Here are the defaults:
 
 1. Conrollers: `locale.controllers.controller_name.action_name.key`
 2. Mailers: `locale.mailers.mailer_name.action_name.key`
 3. Views: `locale.views.template_or_partial_path.key`
+
+### Customising the Namespace
+
+I18nLazyScope accepts a configuration block. This is an example that you might put into a Rails initializer at `config/initializers/i18n_lazy_scope.rb`:
+
+```ruby
+I18nLazyScope.configure do |config|
+  # Resolves lazy lookup to `locale.my.custom.scope.controller_name.action_name.key`
+  config.action_controller_scope = [:my, :custom, :scope]
+  # Resolves lazy lookup to `locale.my.custom.scope.mailer_name.action_name.key`
+  config.action_mailer_scope     = [:my, :custom, :scope]
+  # Resolves lazy lookup to `locale.my.custom.scope.template_or_partial_path.key`
+  config.action_view_scope       = [:my, :custom, :scope]
+end
+```
 
 ### Interpolation
 
@@ -131,11 +122,9 @@ en:
        greeting: "Hello, %{name}!"
 ```
 
-### Scoping
+### A Note on Scoping
 
 If you have to customise the scope on individual basis, then you should use `t` and `translate` that ship with Rails or the [I18n][3] gem. Scoping on individual basis defeates the point of this gem. This gem isn't meant to replace the I18n; it's a tiny wrapper that depends on it.
-
-In future releases you will be able to customise top level namespaces, such as `views`, `controllers`, `mailers`, etc.
 
 ## API
 
@@ -146,6 +135,10 @@ t_scoped(key, **args)
 ## A Note on Ruby Versions
 
 I18nLazyScope requires Ruby 2.0 because it uses the [double splat `**` operator][2] to capture all keyword arguments.
+
+## Version
+
+I18nLazyScope uses semantic versioning.
 
 ## Contributing
 

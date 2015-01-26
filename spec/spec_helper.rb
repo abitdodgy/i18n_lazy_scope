@@ -1,8 +1,15 @@
+require "i18n_lazy_scope"
+
 require "i18n_lazy_scope/action_controller/helper"
 require "i18n_lazy_scope/action_mailer/helper"
 require "i18n_lazy_scope/action_view/helper"
 
 require "i18n_lazy_scope/helper"
+require "i18n_lazy_scope/configuration"
+
+require "support/fake_controller"
+require "support/fake_mailer"
+require "support/fake_view"
 
 require "i18n"
 
