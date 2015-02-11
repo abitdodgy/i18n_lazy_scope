@@ -151,3 +151,7 @@ I18nLazyScope uses semantic versioning.
 [1]: http://guides.rubyonrails.org/i18n.html#lazy-lookup
 [2]: http://stackoverflow.com/questions/18289152/what-does-a-double-splat-operator-do
 [3]: https://github.com/svenfuchs/rails-i18n
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/abitdodgy/i18n_lazy_scope/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
