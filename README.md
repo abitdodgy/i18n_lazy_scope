@@ -87,7 +87,7 @@ en:
 
 The library inserts a top level name in the scope for you. Here are the defaults:
 
-1. Conrollers: `locale.controllers.controller_name.action_name.key`
+1. Controllers: `locale.controllers.controller_name.action_name.key`
 2. Mailers: `locale.mailers.mailer_name.action_name.key`
 3. Views: `locale.views.template_or_partial_path.key`
 
@@ -154,4 +154,3 @@ I18nLazyScope uses semantic versioning.
 
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/abitdodgy/i18n_lazy_scope/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
